@@ -1,0 +1,14 @@
+{
+    "name": "Scrumboard QoL",
+    "description": "A few tweaks to the University of Canterbury's Scrumboard to improve your quality of life.",
+    "version": "1.0",
+    "manifest_version": 3,
+    "content_scripts": [
+        {
+            "js": ["scripts/modal-no-click-backdrop.js"],
+            "matches": [
+                "https://scrumboard.csse.canterbury.ac.nz/*"
+            ]
+        }
+    ]
+}
