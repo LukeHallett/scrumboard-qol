@@ -1,8 +1,17 @@
-const head = document.getElementsByTagName('head');
+const observer = new MutationObserver(function (mutations, observer) {
+    mutations.forEach(function (mutation) {
+        for (let i = 0; i < mutation.addedNodes.length; i++) {
+            if (mutation.addedNodes[i].nodeType === 1) {
+                const node = mutation.addedNodes[i];
 
-if (head.length > 0) {
-    const style = document.createElement('style');
-    style.appendChild(document.createTextNode('.modal-backdrop { pointer-events: none; }'));
+                if (node.classList.contains('modal-backdrop')) {
+                    node.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                    });
+                }
+            }
+        }
+    });
+});
 
-    head[0].appendChild(style);
-}
+observer.observe(document.body, { childList: true, subtree: true, attributes: false, characterData: false });

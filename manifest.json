@@ -6,6 +6,7 @@
     "content_scripts": [
         {
             "js": ["scripts/modal-no-click-backdrop.js"],
+            "run_at": "document_idle",
             "matches": [
                 "https://scrumboard.csse.canterbury.ac.nz/*"
             ]
