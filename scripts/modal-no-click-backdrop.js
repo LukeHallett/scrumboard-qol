@@ -1,4 +1,5 @@
 let loaded = false;
+let consistencyBarScriptLoaded = false;
 let hoursWorked = 0;
 let sprintStartDate = new Date();
 let daysInSprint = 0;
@@ -20,6 +21,14 @@ let reengineerTime = 0;
 let testTimePercentage = 0;
 
 const observer = new MutationObserver(function (mutations, observer) {
+    if (!consistencyBarScriptLoaded) {
+        const consistencyBarScript = document.createElement('script');
+        consistencyBarScript.src = chrome.runtime.getURL('scripts/consistency-bar.js');
+        consistencyBarScript.onload = function() { this.remove(); };
+        (document.body || document.documentElement).appendChild(consistencyBarScript);
+        consistencyBarScriptLoaded = true;
+    }
+
     mutations.forEach(function (mutation) {
         for (const element of mutation.addedNodes) {
             if (element.nodeType === 1) {
@@ -106,10 +115,10 @@ const observer = new MutationObserver(function (mutations, observer) {
                     document.getElementById('worked-hours-chart').innerText = `${percentWorked.toFixed(0)}%`;
 
                     if (!loaded) {
-                        const s = document.createElement('script');
-                        s.src = chrome.runtime.getURL('scripts/additional-stat-cards.js');
-                        s.onload = function() { this.remove(); };
-                        (document.body || document.documentElement).appendChild(s);
+                        const s1 = document.createElement('script');
+                        s1.src = chrome.runtime.getURL('scripts/additional-stat-cards.js');
+                        s1.onload = function() { this.remove(); };
+                        (document.body || document.documentElement).appendChild(s1);
                         loaded = true;
                     }
                 }

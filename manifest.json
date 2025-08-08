@@ -1,7 +1,7 @@
 {
     "name": "Scrumboard QoL",
     "description": "A few tweaks to the University of Canterbury's Scrumboard to improve your quality of life.",
-    "version": "1.0",
+    "version": "1.1",
     "manifest_version": 3,
     "content_scripts": [
         {
@@ -13,7 +13,7 @@
         }
     ],
     "web_accessible_resources": [{
-        "resources": ["scripts/additional-stat-cards.js"],
+        "resources": ["scripts/additional-stat-cards.js", "scripts/consistency-bar.js"],
         "matches": ["https://scrumboard.csse.canterbury.ac.nz/*"]
     }],
     "icons": {
@@ -21,5 +21,10 @@
         "32": "icons/icon32.png",
         "48": "icons/icon48.png",
         "128": "icons/icon128.png"
+    },
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "scrumboard-qol@lukeh.nz"
+        }
     }
 }
