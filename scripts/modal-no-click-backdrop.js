@@ -20,6 +20,8 @@ let refactorTime = 0;
 let reengineerTime = 0;
 let testTimePercentage = 0;
 
+let pairProgrammingTime = 0;
+
 const observer = new MutationObserver(function (mutations, observer) {
     if (!consistencyBarScriptLoaded) {
         const consistencyBarScript = document.createElement('script');
@@ -102,8 +104,38 @@ const observer = new MutationObserver(function (mutations, observer) {
                         '   </div>' +
                         '</div>';
 
+                    const cardThree = document.createElement('div');
+                    cardThree.classList.add('col-auto');
+
+                    cardThree.innerHTML =
+                        '<div class="card p-2 mb-4">' +
+                        '   <div class="card-body">' +
+                        '       <div class="card-title"><h5 id="stat-card-title">Pair Programming Time</h5></div>' +
+                        '       <div class="row d-flex align-items-center">' +
+                        '           <div class="col-auto position-relative">' +
+                        '               <div>' +
+                        '                   <canvas id="chart-custom-pair-programming" width="200" height="200" style="margin-top: -8px; display: block; box-sizing: border-box; touch-action: auto; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); height: 100px; width: 100px;"></canvas>' +
+                        '               </div>' +
+                        '               <div class="position-absolute" style="left: 50%; top: 50%; transform: translate(-50%, -50%)" id="pair-programming-percentage-chart"></div>' +
+                        '           </div>' +
+                        '           <div id="stat-card-text" class="col text-center">' +
+                        '               <span id="text-token-text-content" class="ps-1 ">You have spent</span>' +
+                        '               <div>' +
+                        '                   <span class="fs-1">' +
+                        `                       <span class="ps-1 text-secondary" id="pair-programming-percentage">0</span>` +
+                        '                   </span>' +
+                        '               </div>' +
+                        '               <div>' +
+                        '                   <span id="text-token-text-content" class="px-3">of your feature time paired.</span>' +
+                        '               </div>' +
+                        '           </div>' +
+                        '       </div>' +
+                        '   </div>' +
+                        '</div>';
+
                     cards.appendChild(cardOne);
                     cards.appendChild(cardTwo);
+                    cards.appendChild(cardThree);
                 }
 
                 if (node.classList.contains('card-body') && node.innerHTML.includes('Work Efficiency')) {
@@ -154,9 +186,34 @@ const observer = new MutationObserver(function (mutations, observer) {
                         document.getElementById('test-percentage-chart').innerText = `${testTimePercentage.toFixed(0)}%`;
                     }
                 }
+
+                if (node.classList.toString().includes('col-12 mb-4 p-4 bg-light rounded')) {
+                    for (const child of node.childNodes[1].childNodes[3].childNodes) {
+                        if (child.childNodes[2] !== undefined) {
+                            pairProgrammingTime += timeToDecimal(child.childNodes[2].childNodes[3].innerText);
+
+                            const storyWorkTime = document.getElementById('my-statistics-report-container').childNodes[0].childNodes[5].childNodes[1].childNodes[0].childNodes[1].childNodes[3].childNodes[5].childNodes[3].childNodes[0].innerText;
+
+                            document.getElementById('pair-programming-percentage').innerText = `${((pairProgrammingTime / storyWorkTime) * 100).toFixed(0)}%`;
+                            document.getElementById('pair-programming-percentage-chart').innerText = `${((pairProgrammingTime / storyWorkTime) * 100).toFixed(0)}%`;
+                        }
+                    }
+                }
             }
         }
     });
 });
 
 observer.observe(document.body, { childList: true, subtree: true, attributes: false, characterData: false });
+
+function timeToDecimal(timeStr) {
+    // Extract hours and minutes
+    const match = timeStr.match(/(\d+)h\s*(\d+)m/);
+    if (!match) return null; // Invalid format
+
+    const hours = parseInt(match[1], 10);
+    const minutes = parseInt(match[2], 10);
+
+    // Convert to decimal hours
+    return hours + (minutes / 60);
+}
