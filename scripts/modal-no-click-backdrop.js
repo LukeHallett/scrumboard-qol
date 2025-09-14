@@ -207,12 +207,25 @@ const observer = new MutationObserver(function (mutations, observer) {
 observer.observe(document.body, { childList: true, subtree: true, attributes: false, characterData: false });
 
 function timeToDecimal(timeStr) {
-    // Extract hours and minutes
-    const match = timeStr.match(/(\d+)h\s*(\d+)m/);
-    if (!match) return null; // Invalid format
+    let hours = 0;
+    let minutes = 0;
 
-    const hours = parseInt(match[1], 10);
-    const minutes = parseInt(match[2], 10);
+    // Extract hours if present
+    const hoursMatch = timeStr.match(/(\d+)h/);
+    if (hoursMatch) {
+        hours = parseInt(hoursMatch[1], 10);
+    }
+
+    // Extract minutes if present
+    const minutesMatch = timeStr.match(/(\d+)m/);
+    if (minutesMatch) {
+        minutes = parseInt(minutesMatch[1], 10);
+    }
+
+    // Return null if neither hours nor minutes found
+    if (!hoursMatch && !minutesMatch) {
+        return null; // Invalid format
+    }
 
     // Convert to decimal hours
     return hours + (minutes / 60);

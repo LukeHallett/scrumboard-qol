@@ -1,7 +1,7 @@
 {
     "name": "Scrumboard QoL",
     "description": "A few tweaks to the University of Canterbury's Scrumboard to improve your quality of life.",
-    "version": "1.3",
+    "version": "1.4",
     "manifest_version": 3,
     "content_scripts": [
         {
